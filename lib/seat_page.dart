@@ -46,7 +46,7 @@ class _SeatPageState extends State<SeatPage> {
       context: context,
       builder: (context) => CupertinoAlertDialog(
         title: const Text('예매 하시겠습니까?'),
-        content: Text('${widget.departureStation}에서 ${widget.arrivalStation}까지 1개의 좌석이 예매됩니다.'),
+        content: Text('좌석 : $row-$col'), // 좌석 표시 형식 변경
         actions: [
           CupertinoDialogAction(
             child: const Text('취소'),
@@ -292,12 +292,15 @@ class _SeatPageState extends State<SeatPage> {
   Widget _buildSeat(String seatId) {
     final bool isSelected = selectedSeats.contains(seatId);
     
-    return Container(
-      width: 50, // 너비: 50
-      height: 50, // 높이: 50
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.purple : Colors.grey[300], // 색상: 선택됨 - Colors.purple, 선택안됨 - Colors.grey[300]
-        borderRadius: BorderRadius.circular(8), // 모서리 둥글기: 8
+    return GestureDetector( // 좌석 선택을 위한 GestureDetector 추가
+      onTap: () => _toggleSeat(seatId), // 터치 시 좌석 선택 토글 함수 호출
+      child: Container(
+        width: 50, // 너비: 50
+        height: 50, // 높이: 50
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.purple : Colors.grey[300], // 색상: 선택됨 - Colors.purple, 선택안됨 - Colors.grey[300]
+          borderRadius: BorderRadius.circular(8), // 모서리 둥글기: 8
+        ),
       ),
     );
   }
