@@ -49,21 +49,23 @@ class _SeatPageState extends State<SeatPage> {
         content: Text('좌석 : $row-$col'), // 좌석 표시 형식 변경
         actions: [
           CupertinoDialogAction(
+              isDestructiveAction: true, // 취소 버튼을 빨간색으로
             child: const Text('취소'),
             onPressed: () {
               setState(() {
                 selectedSeats.remove(seatId);
                 currentSelectedSeat = null;
               });
-              Navigator.pop(context);
+              Navigator.pop(context); //  Dialog 제거
             },
           ),
           CupertinoDialogAction(
-            child: const Text('확인'),
+              isDefaultAction: true, // 확인 버튼을 강조
+            child: const Text('확인'), // 확인 버튼 파란색으로 표시
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pop(context); // SeatPage 닫기
+              Navigator.pop(context);  // HomePage로 이동(뒤로가기 두번)
             },
           ),
         ],
