@@ -61,7 +61,7 @@ class _SeatPageState extends State<SeatPage> with SingleTickerProviderStateMixin
           borderRadius: BorderRadius.circular(15),
         ),
         title: const Text('예매 하시겠습니까?'),
-        content: Text('수서에서 천안아산까지 1개의 좌석이 예매됩니다.\n좌석: $seatId'),
+        content: Text('${widget.departureStation}에서 ${widget.arrivalStation}까지 1개의 좌석이 예매됩니다.\n좌석: $seatId'),
         actions: [
           TextButton(
             child: const Text('취소'),
@@ -109,13 +109,13 @@ class _SeatPageState extends State<SeatPage> with SingleTickerProviderStateMixin
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('수서'),
+                      Text(widget.departureStation),  // 출발지 표시
                       const SizedBox(width: 8),
                       Icon(Icons.circle, size: 12, color: Colors.purple),
                     ],
                   ),
                 ),
-                const Tab(text: '부산'),
+                Tab(text: widget.arrivalStation),  // 도착지 표시
               ],
             ),
           ),
