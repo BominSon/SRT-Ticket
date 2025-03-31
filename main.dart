@@ -1,6 +1,6 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
-import 'home_page.dart';  // 상대 경로로 수정
+import 'home_page.dart';  // 이 임포트는 필요합니다
 
 void main() {
   runApp(const TrainTicketApp());
@@ -23,7 +23,7 @@ class TrainTicketApp extends StatelessWidget {
           centerTitle: true,
         ),
       ),
-      home: const HomePage(),  // HomePage 클래스 사용
+      home: const HomePage(),  // 여기에서 HomePage 클래스를 사용합니다
     );
   }
 }
