@@ -60,5 +60,5 @@ flutter run
 - Flutter
 - Dart
 
-## 작성자자
+## 작성자
 [봄in]
