@@ -1,0 +1,11 @@
+flutter_train_app/
+│
+├── lib/
+│   ├── main.dart              // 앱 진입점
+│   │
+│   └── pages/
+│       ├── home_page.dart     // 출발역, 도착역 선택 화면
+│       ├── station_list_page.dart  // 기차역 리스트 화면
+│       └── seat_page.dart     // 좌석 선택 화면
+│
+├── pubspec.yaml               // 프로젝트 메타데이터 및 의존성
