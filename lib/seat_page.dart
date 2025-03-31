@@ -37,41 +37,45 @@ class _SeatPageState extends State<SeatPage> {
   }
 
   // 예매 확인 대화상자
-  void _showBookingConfirmDialog(String seatId) {
-    // seatId에서 행과 열 추출 (예: "3A"에서 행=3, 열=A)
-    String row = seatId.substring(0, seatId.length - 1);
-    String col = seatId.substring(seatId.length - 1);
-    
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: const Text('예매 하시겠습니까?'),
-        content: Text('좌석 : $row-$col'), // 좌석 표시 형식 변경
-        actions: [
-          CupertinoDialogAction(
-              isDestructiveAction: true, // 취소 버튼을 빨간색으로
-            child: const Text('취소'),
-            onPressed: () {
-              setState(() {
-                selectedSeats.remove(seatId);
-                currentSelectedSeat = null;
-              });
-              Navigator.pop(context); //  Dialog 제거
-            },
+void _showBookingConfirmDialog(String seatId) {
+  // seatId에서 행과 열 추출 (예: "3A"에서 행=3, 열=A)
+  String row = seatId.substring(0, seatId.length - 1);
+  String col = seatId.substring(seatId.length - 1);
+  
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('예매 하시겠습니까?'),
+      content: Text('좌석 : $row-$col'),
+      actions: [
+        TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.red, // 취소 버튼 글자색 빨간색
           ),
-          CupertinoDialogAction(
-              isDefaultAction: true, // 확인 버튼을 강조
-            child: const Text('확인'), // 확인 버튼 파란색으로 표시
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context); // SeatPage 닫기
-              Navigator.pop(context);  // HomePage로 이동(뒤로가기 두번)
-            },
+          onPressed: () {
+            setState(() {
+              selectedSeats.remove(seatId);
+              currentSelectedSeat = null;
+            });
+            Navigator.pop(context);
+          },
+          child: const Text('취소'),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.blue, // 확인 버튼 글자색 파란색
           ),
-        ],
-      ),
-    );
-  }
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          child: const Text('확인'),
+        ),
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
