@@ -42,67 +42,31 @@ class _SeatPageState extends State<SeatPage> {
     String row = seatId.substring(0, seatId.length - 1);
     String col = seatId.substring(seatId.length - 1);
     
-    showDialog(
+    showCupertinoDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        contentPadding: EdgeInsets.zero,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  const Text(
-                    '예매 하시겠습니까?',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Text('좌석 : $row-$col'), // 좌석 번호 표시 형식 변경
-                ],
-              ),
-            ),
-            const Divider(height: 1),
-            IntrinsicHeight(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {
-                          selectedSeats.remove(seatId);
-                          currentSelectedSeat = null;
-                        });
-                        Navigator.pop(context);
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: const Text('취소', style: TextStyle(fontSize: 16)),
-                    ),
-                  ),
-                  const VerticalDivider(width: 1),
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: const Text('확인', style: TextStyle(fontSize: 16)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text('예매 하시겠습니까?'),
+        content: Text('${widget.departureStation}에서 ${widget.arrivalStation}까지 1개의 좌석이 예매됩니다.'),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('취소'),
+            onPressed: () {
+              setState(() {
+                selectedSeats.remove(seatId);
+                currentSelectedSeat = null;
+              });
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('확인'),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -112,13 +76,9 @@ class _SeatPageState extends State<SeatPage> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // ❶ [앱바 타이틀] 별도의 스타일 지정 X - 중앙 정렬만 지정
         title: const Text('좌석 선택'),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
       body: Column(
         children: [
@@ -129,28 +89,30 @@ class _SeatPageState extends State<SeatPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // ❷ [출발역] 글자 두께: FontWeight.bold 글자 색상: Colors.purple 글자 크기: 30
                 Text(
                   widget.departureStation,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.purple,
                   ),
                 ),
-                const SizedBox(width: 15),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black),
+                
+                // ❹ [화살표 아이콘] 아이콘 데이터: Icons.arrow_circle_right_outlined 아이콘 크기: 30
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Icon(
+                    Icons.arrow_circle_right_outlined,
+                    size: 30,
                   ),
-                  child: const Icon(Icons.arrow_forward, size: 16),
                 ),
-                const SizedBox(width: 15),
+                
+                // ❸ [도착역] 글자 두께: FontWeight.bold 글자 색상: Colors.purple 글자 크기: 30
                 Text(
                   widget.arrivalStation,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.purple,
                   ),
@@ -159,103 +121,144 @@ class _SeatPageState extends State<SeatPage> {
             ),
           ),
           
-          // 선택 상태 표시
+          // ❺ 좌석 상태 안내
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // 선택됨 상태 박스
                 Container(
-                  width: 20,
-                  height: 20,
+                  width: 24,
+                  height: 24,
                   decoration: BoxDecoration(
                     color: Colors.purple,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                const SizedBox(width: 4),
-                const Text('선택됨'),
-                const SizedBox(width: 40),
+                const SizedBox(width: 4), // 간격 4
+                const Text('선택됨'), // 별도 스타일 지정 X
+                
+                const SizedBox(width: 20), // 선택됨, 선택안됨 간격 20
+                
+                // 선택안됨 상태 박스
                 Container(
-                  width: 20,
-                  height: 20,
+                  width: 24,
+                  height: 24,
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                const SizedBox(width: 4),
-                const Text('선택안됨'),
+                const SizedBox(width: 4), // 간격 4
+                const Text('선택안됨'), // 별도 스타일 지정 X
               ],
             ),
           ),
           
-          // 좌석 레이블 (A, B, C, D)
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-            color: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text('A', style: TextStyle(fontSize: 16)),
-                const Text('B', style: TextStyle(fontSize: 16)),
-                const SizedBox(width: 20),  // 중앙 공간
-                const Text('C', style: TextStyle(fontSize: 16)),
-                const Text('D', style: TextStyle(fontSize: 16)),
-              ],
-            ),
-          ),
-          
-          // 좌석 리스트 영역
+          // ❻❼ ABCD 레이블 및 좌석 리스트 영역
           Expanded(
             child: Container(
               color: Colors.white,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  final rowNumber = index + 1;
-                  // 행 번호 5 표시 건너뛰기
-                  if (rowNumber == 4 || rowNumber == 5) {
-                    return const SizedBox.shrink();
-                  }
-                  
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Column(
+                children: [
+                  // ABCD 레이블 표시 (fontSize 18)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // A열 좌석
-                        _buildSeat('$rowNumber${'A'}'),
-                        
-                        // B열 좌석
-                        _buildSeat('$rowNumber${'B'}'),
-                        
-                        // 행 번호
-                        SizedBox(
-                          width: 20,
-                          child: Text(
-                            '$rowNumber',
-                            style: const TextStyle(fontSize: 16),
-                            textAlign: TextAlign.center,
+                        Container(
+                          width: 50,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'A',
+                            style: TextStyle(fontSize: 18),
                           ),
                         ),
-                        
-                        // C열 좌석
-                        _buildSeat('$rowNumber${'C'}'),
-                        
-                        // D열 좌석
-                        _buildSeat('$rowNumber${'D'}'),
+                        Container(
+                          width: 50,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'B',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        Container(
+                          width: 50,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'C',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        Container(
+                          width: 50,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'D',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
                       ],
                     ),
-                  );
-                },
+                  ),
+                  
+                  // ❿ 좌석 리스트뷰 영역
+                  Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      itemCount: 20, // 총 20개의 행
+                      itemBuilder: (context, index) {
+                        final rowNumber = index + 1;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0), // 세로 간격 8
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center, // 내용 가운데 정렬
+                            children: [
+                              // A열 좌석
+                              _buildSeat('${rowNumber}A'),
+                              
+                              const SizedBox(width: 4), // 가로 간격 4
+                              
+                              // B열 좌석
+                              _buildSeat('${rowNumber}B'),
+                              
+                              // 행 번호
+                              Container(
+                                width: 50,
+                                height: 50,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '$rowNumber',
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              
+                              // C열 좌석
+                              _buildSeat('${rowNumber}C'),
+                              
+                              const SizedBox(width: 4), // 가로 간격 4
+                              
+                              // D열 좌석
+                              _buildSeat('${rowNumber}D'),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
           
-          // 예매하기 버튼
+          // ❾ 예매하기 버튼
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SizedBox(
@@ -264,18 +267,17 @@ class _SeatPageState extends State<SeatPage> {
               child: ElevatedButton(
                 onPressed: selectedSeats.isNotEmpty ? () {} : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.purple, // 버튼 색상: Colors.purple
+                  foregroundColor: Colors.white, // 글자 색상: Colors.white
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(20), // 모서리 둥글기: 20
                   ),
-                  disabledBackgroundColor: Colors.purple.withOpacity(0.6),
                 ),
                 child: const Text(
                   '예매 하기',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 18, // 글자 크기: 18
+                    fontWeight: FontWeight.bold, // 글자 두께: FontWeight.bold
                   ),
                 ),
               ),
@@ -286,19 +288,16 @@ class _SeatPageState extends State<SeatPage> {
     );
   }
 
-  // 좌석 위젯 빌더
+  // ❽ 좌석 위젯 빌더
   Widget _buildSeat(String seatId) {
     final bool isSelected = selectedSeats.contains(seatId);
     
-    return GestureDetector(
-      onTap: () => _toggleSeat(seatId),
-      child: Container(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.purple : Colors.grey[300],
-          borderRadius: BorderRadius.circular(12),
-        ),
+    return Container(
+      width: 50, // 너비: 50
+      height: 50, // 높이: 50
+      decoration: BoxDecoration(
+        color: isSelected ? Colors.purple : Colors.grey[300], // 색상: 선택됨 - Colors.purple, 선택안됨 - Colors.grey[300]
+        borderRadius: BorderRadius.circular(8), // 모서리 둥글기: 8
       ),
     );
   }
