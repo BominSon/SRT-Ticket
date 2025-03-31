@@ -36,7 +36,7 @@ class _SeatPageState extends State<SeatPage> {
     });
   }
 
-  // 예매 확인 대화상자
+// 예매 확인 대화상자
 void _showBookingConfirmDialog(String seatId) {
   // seatId에서 행과 열 추출 (예: "3A"에서 행=3, 열=A)
   String row = seatId.substring(0, seatId.length - 1);
@@ -44,35 +44,68 @@ void _showBookingConfirmDialog(String seatId) {
   
   showDialog(
     context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('예매 하시겠습니까?'),
-      content: Text('좌석 : $row-$col'),
-      actions: [
-        TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.red, // 취소 버튼 글자색 빨간색
-          ),
-          onPressed: () {
-            setState(() {
-              selectedSeats.remove(seatId);
-              currentSelectedSeat = null;
-            });
-            Navigator.pop(context);
-          },
-          child: const Text('취소'),
+    builder: (context) => Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+              width: 250, // 여기에 너비 추가
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              '예매 하시겠습니까?',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '좌석 : $row-$col',
+              style: const TextStyle(
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.red,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        selectedSeats.remove(seatId);
+                        currentSelectedSeat = null;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: const Text('취소'),
+                  ),
+                ),
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.blue,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('확인'),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-        TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.blue, // 확인 버튼 글자색 파란색
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-          },
-          child: const Text('확인'),
-        ),
-      ],
+      ),
     ),
   );
 }
