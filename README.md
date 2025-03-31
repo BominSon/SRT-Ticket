@@ -10,7 +10,7 @@ Flutter를 사용한 기차 좌석 예매 애플리케이션입니다. 사용자
 - 선택된 좌석 시각적 표현 (보라색 강조)
 
 ## 구현 화면
-[여기에 앱 스크린샷 또는 GIF 추가]
+![Image](https://github.com/user-attachments/assets/c470a39a-f0ee-4412-b57a-5d28f919ff35)
 
 ## 트러블 슈팅
 
